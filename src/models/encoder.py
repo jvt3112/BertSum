@@ -91,8 +91,8 @@ class TransformerInterEncoder(nn.Module):
         batch_size, n_sents = top_vecs.size(0), top_vecs.size(1)
         pos_emb = self.pos_emb.pe[:, :n_sents]
         x = top_vecs * mask[:, :, None].float()
-        x = x + pos_emb
-
+        x[:, :min(5,n_sents)] = x[:, :min(5,n_sents)] + pos_emb[:,:min(5,n_sents)]
+        print('work kar rha h')
         for i in range(self.num_inter_layers):
             x = self.transformer_inter[i](i, x, x, 1 - mask)  # all_sents * max_tokens * dim
 
